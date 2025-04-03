@@ -45,8 +45,13 @@ const Login = () => {
           const res = await axios.post(`${API_ENDPOINTS.server1}/api/login`, {
             username,
             email,
-            password,
-          });
+            password
+          }, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
       
           // 2. Verificar si la respuesta tiene datos
           if (!res || !res.data) {
