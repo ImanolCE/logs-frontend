@@ -126,44 +126,40 @@ const Login = () => {
       };
 
 
-    const verifyOTP = async (e) => {
+      const verifyOTP = async (e) => {
         e.preventDefault();
-
-         // Validación básica
+    
         if (!otp.trim()) {
             alert("Por favor ingresa el código OTP");
             return;
         }
     
-        const token = localStorage.getItem("token");
-        console.log("Token en localStorage:", token); // Verificar si el token existe
-
         try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("No se encontró token de sesión");
+                return navigate("/login");
+            }
+    
             const res = await axios.post(
                 `${API_ENDPOINTS.server1}/api/verify-otp`,
-                {
-                  email,
-                  token: otp
-                },
-                {
-                  headers: {
-                    Authorization: `Bearer ${token}`
-                  }
-                }
-              );
-
-            console.log("Respuesta del servidor:", res.data); //  Verifica qué responde el backend
+                { email, token: otp },
+                { headers: { Authorization: `Bearer ${token}` } }
+            );
     
             if (res.data.success) {
-                alert("Autenticado!");
-                navigate("/home");
-
+                // Guarda el token definitivo si el backend lo devuelve
+                if (res.data.token) {
+                    localStorage.setItem("token", res.data.token);
+                }
+                navigate("/home"); // Redirige antes del alert
+                return; // Asegura que no continúe ejecutando código
             } else {
                 alert("Código inválido");
             }
         } catch (error) {
-            console.error("Error en la verificación OTP", error);
-            alert("Error en la autenticación");
+            console.error("Error en verificación OTP:", error);
+            alert(error.response?.data?.message || "Error en autenticación");
         }
     };
     

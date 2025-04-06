@@ -8,31 +8,31 @@ const Home = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Verificar si el usuario está autenticado, si no, redirigir al login
-        const fetchUserInfo = async () => {
+        const verifyAndFetch = async () => {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                return navigate("/login");
+            }
+    
             try {
-                const token = localStorage.getItem("token");
-                if (!token) {
-                    navigate("/login");
-                    return;
-                }
-        
+                // Primero verifica el token
+                await axios.get(`${API_ENDPOINTS.server1}/api/verify-token`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
+                // Luego obtiene la info
                 const res = await axios.get(`${API_ENDPOINTS.server1}/api/getInfo`, {
-                    headers: { 
-                      Authorization: `Bearer ${token}`,
-                      'Accept': 'application/json'
-                    }
-                  });
-        
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                
                 setUserInfo(res.data);
             } catch (error) {
-                console.error("Error al obtener la información del usuario", error);
-                //navigate("/login");
+                localStorage.removeItem("token");
+                navigate("/login");
             }
         };
-        
-
-        fetchUserInfo();
+    
+        verifyAndFetch();
     }, [navigate]);
 
     return (
