@@ -47,17 +47,25 @@ const Login = () => {
             email,
             password
           }, {
-            withCredentials: true,
+            //withCredentials: true,
             headers: {
+              'Content-Type': 'application/json',
               'Accept': 'application/json'
             }
           })
       
-          // 2. Verificar si la respuesta tiene datos
-          if (!res || !res.data) {
-            throw new Error("Respuesta del servidor inválida");
+          // Manejo mejorado de errores:
+          if (res.data.success) {
+            localStorage.setItem("token", res.data.token);
+            if (res.data.requiresMFA) {
+              setStep("otp");
+            } else {
+              navigate("/home");
+            }
+          } else {
+            alert(res.data.message || "Error en la autenticación");
           }
-      
+          
           // 3. Verificar si hay token en la respuesta
           if (!res.data.token) {
             throw new Error("No se recibió token en la respuesta");

@@ -18,7 +18,10 @@ const Home = () => {
                 }
         
                 const res = await axios.get(`${API_ENDPOINTS.server1}/api/getInfo`, {
-                    headers: { Authorization: `Bearer ${token}` },
+                    headers: { 
+                      Authorization: `Bearer ${token}`,
+                      'Accept': 'application/json'
+                    }
                   });
         
                 setUserInfo(res.data);
