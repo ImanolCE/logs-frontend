@@ -16,32 +16,20 @@ const Login = () => {
     const [step, setStep] = useState("login");
 
     const handleRegister = async (e) => {
-      e.preventDefault();
-    
-      if (!username.trim() || !email.trim() || !password.trim()) {
-        alert("Debes ingresar un username, email y una contraseña.");
-        return;
-      }
-    
-      try {
+        e.preventDefault();
+
+        if (!username.trim() || !email.trim() || !password.trim()) {
+            alert("Debes ingresar un username, email y una contraseña.");
+            return;
+        }
+
         const res = await axios.post(`${API_ENDPOINTS.server1}/api/register`, {
-          username,
-          email,
-          password,
+            username,
+            email,
+            password,
         });
-        
         setSecretUrl(res.data.secret);
         setStep("qr");
-      } catch (error) {
-        console.error("Error en registro:", error);
-        // Muestra el mensaje específico del backend o uno genérico
-        alert(error.response?.data?.message || "Error al registrar usuario");
-        
-        // Si es error 409 (usuario ya existe), limpia el campo email
-        if (error.response?.status === 409) {
-          setEmail("");
-        }
-      }
     };
 
     /* const handleLogin = async (e) => {
