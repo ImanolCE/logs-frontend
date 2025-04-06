@@ -97,30 +97,37 @@ const Login = () => {
     
       const handleLogin = async (e) => {
         e.preventDefault();
+
+        if (!username.trim() || !email.trim() || !password.trim()) {
+          alert("Debes ingresar un username, email y una contraseña.");
+          return;
+        }
         
         try {
           const res = await axios.post(`${API_ENDPOINTS.server1}/api/login`, {
             email, // Asegúrate de enviar solo email y password
             password
           }, {
-            withCredentials: true,
-            headers: {
+            //withCredentials: true,
+           /*  headers: {
               'Content-Type': 'application/json'
-            }
+            } */
           });
       
           if (res.data.success) {
+            localStorage.setItem("token", res.data.token);
+
             if (res.data.requiresMFA) {
               setStep("otp");
             } else {
-              localStorage.setItem("token", res.data.token);
+              
               navigate("/home");
             }
           } else {
             alert(res.data.message || "Error en la autenticación");
           }
         } catch (error) {
-          console.error("Error:", error.response?.data || error.message);
+          console.error("Error:", error);
           alert(error.response?.data?.message || "Error en el servidor");
         }
       };
@@ -136,10 +143,7 @@ const Login = () => {
     
         try {
             const token = localStorage.getItem("token");
-            if (!token) {
-                alert("No se encontró token de sesión");
-                return navigate("/login");
-            }
+            if (!token) throw new Error("Sesión no encontrada");
     
             const res = await axios.post(
                 `${API_ENDPOINTS.server1}/api/verify-otp`,
@@ -153,7 +157,7 @@ const Login = () => {
                     localStorage.setItem("token", res.data.token);
                 }
                 navigate("/home"); // Redirige antes del alert
-                return; // Asegura que no continúe ejecutando código
+                // return; // Asegura que no continúe ejecutando código
             } else {
                 alert("Código inválido");
             }
