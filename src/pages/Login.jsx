@@ -32,7 +32,7 @@ const Login = () => {
         setStep("qr");
     };
 
-    const handleLogin = async (e) => {
+    /* const handleLogin = async (e) => {
         e.preventDefault();
         
         if (!username.trim() || !email.trim() || !password.trim()) {
@@ -93,8 +93,38 @@ const Login = () => {
           alert(error.response?.data?.message || "Error en el servidor al iniciar sesión");
           localStorage.removeItem("token");
         }
-      };
+      }; */
     
+      const handleLogin = async (e) => {
+        e.preventDefault();
+        
+        try {
+          const res = await axios.post(`${API_ENDPOINTS.server1}/api/login`, {
+            email, // Asegúrate de enviar solo email y password
+            password
+          }, {
+            withCredentials: true,
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+      
+          if (res.data.success) {
+            if (res.data.requiresMFA) {
+              setStep("otp");
+            } else {
+              localStorage.setItem("token", res.data.token);
+              navigate("/home");
+            }
+          } else {
+            alert(res.data.message || "Error en la autenticación");
+          }
+        } catch (error) {
+          console.error("Error:", error.response?.data || error.message);
+          alert(error.response?.data?.message || "Error en el servidor");
+        }
+      };
+
 
     const verifyOTP = async (e) => {
         e.preventDefault();
