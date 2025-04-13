@@ -4,6 +4,7 @@ node_modules/
 # Ignorar archivos de configuración y credenciales
 firestore.json
 .env
+.env.local
 backend/config/firestore.json
 
 # Ignorar archivos de sistema
