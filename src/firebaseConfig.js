@@ -3,14 +3,14 @@ import { getFirestore } from "firebase/firestore";
 
 // Tu configuración de Firebase (la misma que usas en el backend)
 const firebaseConfig = {
-    apiKey: "AIzaSyDeTYJeTCnQcBM0fHF9_iis4WJeGCzn2Cw",
-    authDomain: "pfinalsda.firebaseapp.com",
-    projectId: "pfinalsda",
-    storageBucket: "pfinalsda.firebasestorage.app",
-    messagingSenderId: "539157276780",
-    appId: "1:539157276780:web:3f6e566be2d3f251531049",
-    measurementId: "G-G3GL6CT8FE"
-  };
+  apiKey: "AIzaSyC-76LOBy3rrvOG80dQiEVBXhDJ6DQltRg",
+  authDomain: "pruebasremsapp.firebaseapp.com",
+  projectId: "pruebasremsapp",
+  storageBucket: "pruebasremsapp.firebasestorage.app",
+  messagingSenderId: "730949923748",
+  appId: "1:730949923748:web:3089445588be2dd80c4731",
+  measurementId: "G-DPGXHV38S0"
+};
 
 // Inicializa Firebase
 const app = initializeApp(firebaseConfig);

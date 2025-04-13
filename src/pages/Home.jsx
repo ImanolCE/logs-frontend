@@ -50,6 +50,18 @@ const Home = () => {
                         de manera eficiente. El botón abajo te llevará a la vista de Logs.
                     </p>
                     <button onClick={() => navigate("/logs")}>Ir a Logs</button>
+
+                   
+                    <button
+                        style={{ marginTop: "10px" }}
+                        onClick={() => {
+                            localStorage.removeItem("token");
+                            navigate("/login");
+                        }}
+                    >
+                        Cerrar Sesión
+                    </button>
+
                 </>
             ) : (
                 <p>Cargando información...</p>

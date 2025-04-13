@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bar, Line, Pie } from 'react-chartjs-2';
+import { Bar, Pie } from 'react-chartjs-2';
 import { 
   Chart as ChartJS, 
   CategoryScale, 
@@ -15,6 +15,8 @@ import {
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { db } from '../firebaseConfig'; // Ruta ajustada
 
+import { useNavigate } from "react-router-dom";
+
 ChartJS.register(
   CategoryScale, 
   LinearScale, 
@@ -26,6 +28,8 @@ ChartJS.register(
   PointElement,
   LineElement
 );
+
+
 
 const processLogData = (snapshot) => {
   return snapshot.docs.map(doc => {
@@ -55,6 +59,8 @@ const Logs = () => {
   const [server2Logs, setServer2Logs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const navigate = useNavigate();  
+
   useEffect(() => {
     const fetchAllLogs = async () => {
       try {
@@ -79,6 +85,8 @@ const Logs = () => {
         setLoading(false);
       }
     };
+
+    
     
     fetchAllLogs();
   }, []);
@@ -196,9 +204,21 @@ const Logs = () => {
         height: 400
     };
 
+    
+    
+
     return (
+      
         <div className="logs-container">
             <h1>Dashboard de Logs</h1>
+
+            <button
+                style={{ marginBottom: "20px" }}
+                onClick={() => navigate("/home")}
+            >
+                Regresar al HOme
+            </button>
+
             
             <div className="chart-container">
                 <h2>Niveles de Log por Servidor</h2>
